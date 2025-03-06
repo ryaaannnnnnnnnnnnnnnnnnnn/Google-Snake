@@ -18,5 +18,5 @@ window.addEventListener('keydown', e => {
 })
 
 export function getInputDirection () {
-    return getInputDirection;
+    return inputDirection;
 }
