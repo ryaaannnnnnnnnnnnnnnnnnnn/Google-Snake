@@ -4,23 +4,26 @@ import { outsideGrid } from "./grid.js";
 
 let lastRenderTime = 0;
 let gameOver = false;
+let score = 0;
 const gameBoard = document.getElementById('game-board');
+const scoreElement = document.getElementById('score');
+const finalScoreElement = document.getElementById('final-score');
 
 // GAME (RENDER) LOOP //
-function main(currentTime){
-
-    if(gameOver){
-        if(confirm('Game Over! Try Again! Press ok to restart.')){
+function main(currentTime) {
+    if (gameOver) {
+        finalScoreElement.textContent = `Final Score: ${score}`;
+        finalScoreElement.style.display = 'block';
+        if (confirm('You lost. Press ok to restart.')) {
             window.location.reload();
         }
         return;
     }
 
-
     window.requestAnimationFrame(main);
     const secondsSinceLastRender = (currentTime - lastRenderTime) / 1000;
 
-    if(secondsSinceLastRender < 1 / SNAKE_SPEED) return;
+    if (secondsSinceLastRender < 1 / SNAKE_SPEED) return;
 
     console.log('Render');
     lastRenderTime = currentTime;
@@ -31,13 +34,14 @@ function main(currentTime){
 
 window.requestAnimationFrame(main);
 
-function update(){
+function update() {
     updateSnake();
     updateFood();
     checkDeath();
+    updateScore();
 }
 
-function draw(){
+function draw() {
     gameBoard.innerHTML = '';
     drawSnake(gameBoard);
     drawFood(gameBoard);
@@ -47,3 +51,7 @@ function checkDeath() {
     gameOver = outsideGrid(getSnakeHead()) || snakeIntersection();
 }
 
+function updateScore() {
+    score = document.querySelectorAll('.snake').length - 1;
+    scoreElement.textContent = `Score: ${score}`;
+}
